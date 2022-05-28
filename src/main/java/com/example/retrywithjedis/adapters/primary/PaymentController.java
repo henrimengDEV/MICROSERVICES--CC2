@@ -2,10 +2,12 @@ package com.example.retrywithjedis.adapters.primary;
 
 import com.example.retrywithjedis.domain.order.Order;
 import com.example.retrywithjedis.domain.payment.*;
+import com.example.retrywithjedis.kernel.PaymentFailedException;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.ArrayList;
+import java.util.Optional;
 import java.util.UUID;
 
 @RestController
@@ -26,6 +28,10 @@ public final class PaymentController {
         UUID transactionUUID = UUID.fromString(transactionId);
 
         paymentCache.verifyIdempotency(transactionUUID);
+
+        Optional<Payment> existingPayment = paymentRepository.findByUUID(transactionUUID);
+        if (existingPayment.isPresent())
+            throw new PaymentFailedException("Payment already done.");
 
         //fake paymentRequest data
         Payment payment = Payment.of(

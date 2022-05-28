@@ -11,8 +11,4 @@ public class RetryWithJedisApplication {
     }
 }
 
-// TODO
-// implem le test du retry coté client et server, rajouter quelques use cases en fonction des consignes.
-// doc OpenAPI
-// Schema des use-cases
-
+//TODO Schema use-case Payment

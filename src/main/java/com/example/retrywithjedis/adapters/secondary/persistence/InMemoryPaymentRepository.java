@@ -5,9 +5,7 @@ import com.example.retrywithjedis.domain.payment.PaymentId;
 import com.example.retrywithjedis.domain.payment.PaymentRepository;
 import org.springframework.stereotype.Repository;
 
-import java.util.List;
-import java.util.Map;
-import java.util.NoSuchElementException;
+import java.util.*;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.atomic.AtomicInteger;
 
@@ -32,6 +30,12 @@ public class InMemoryPaymentRepository implements PaymentRepository {
             throw new NoSuchElementException("No entity Payment found with id : " + PaymentId.getValue());
         }
         return Payment;
+    }
+
+    @Override
+    public Optional<Payment> findByUUID(UUID uuid) {
+        return data.values().stream()
+                .filter(payment -> payment.getUuid().equals(uuid)).findFirst();
     }
 
     @Override
