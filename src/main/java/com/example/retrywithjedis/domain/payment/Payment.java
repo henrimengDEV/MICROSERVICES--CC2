@@ -1,31 +1,42 @@
 package com.example.retrywithjedis.domain.payment;
 
 import com.example.retrywithjedis.domain.order.Order;
-import org.springframework.data.redis.core.RedisHash;
 
 import java.io.Serializable;
 import java.util.List;
 import java.util.UUID;
 
-@RedisHash("Payment")
+//@RedisHash("Payment")
 public final class Payment implements Serializable {
 
-    private final UUID id;
+    private final UUID uuid;
+    private PaymentId paymentId;
     private final BuyerInfo buyerInfo;
     private final String checkoutId;
     private final CreaditCardInfo creditCardInfo;
     private final List<Order> paymentOrders;
+    private PaymentStatus status;
 
-    public Payment(UUID id, BuyerInfo buyerInfo, String checkoutId, CreaditCardInfo creditCardInfo, List<Order> paymentOrders) {
-        this.id = id;
+    private Payment(UUID uuid, PaymentId id, BuyerInfo buyerInfo, String checkoutId, CreaditCardInfo creditCardInfo, List<Order> paymentOrders, PaymentStatus status) {
+        this.uuid = uuid;
+        this.paymentId = id;
         this.buyerInfo = buyerInfo;
         this.checkoutId = checkoutId;
         this.creditCardInfo = creditCardInfo;
         this.paymentOrders = paymentOrders;
+        this.status = status;
     }
 
-    public UUID getId() {
-        return id;
+    public static Payment of(UUID uuid, BuyerInfo buyerInfo, String checkoutId, CreaditCardInfo creditCardInfo, List<Order> paymentOrders, PaymentStatus paymentStatus) {
+        return new Payment(uuid, new PaymentId(-1), buyerInfo, checkoutId, creditCardInfo, paymentOrders, paymentStatus);
+    }
+
+    public UUID getUuid() {
+        return uuid;
+    }
+
+    public PaymentId getPaymentId() {
+        return paymentId;
     }
 
     public BuyerInfo getBuyerInfo() {
@@ -42,5 +53,17 @@ public final class Payment implements Serializable {
 
     public List<Order> getPaymentOrders() {
         return paymentOrders;
+    }
+
+    public void setPaymentId(int id) {
+        this.paymentId = new PaymentId(id);
+    }
+
+    public String getStatus() {
+        return this.status.getValue();
+    }
+
+    public void setStatus(PaymentStatus status) {
+        this.status = status;
     }
 }

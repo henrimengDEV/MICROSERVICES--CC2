@@ -1,0 +1,8 @@
+{
+  "properties": [
+    {
+      "name": "redis.key-prefix.payment",
+      "type": "java.lang.String",
+      "description": "Description for redis.key-prefix.payment."
+    }
+  ] }

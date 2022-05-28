@@ -1,10 +1,10 @@
 package com.example.retrywithjedis.domain.payment;
 
-import org.springframework.data.redis.core.RedisHash;
+
 
 import java.util.UUID;
 
-@RedisHash("PaymentTransactional")
+//@RedisHash("PaymentTransactional")
 public final class PaymentTransactional {
 
     private final UUID id;

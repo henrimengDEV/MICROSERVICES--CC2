@@ -2,9 +2,6 @@ package com.example.retrywithjedis;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
-import org.springframework.context.annotation.Bean;
-import org.springframework.data.redis.connection.jedis.JedisConnectionFactory;
-import org.springframework.data.redis.core.RedisTemplate;
 
 @SpringBootApplication
 public class RetryWithJedisApplication {
@@ -13,3 +10,9 @@ public class RetryWithJedisApplication {
         SpringApplication.run(RetryWithJedisApplication.class, args);
     }
 }
+
+// TODO
+// implem le test du retry coté client et server, rajouter quelques use cases en fonction des consignes.
+// doc OpenAPI
+// Schema des use-cases
+
