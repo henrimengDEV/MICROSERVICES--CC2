@@ -50,9 +50,8 @@ public class RedisPaymentCache implements PaymentCache {
             jedis = acquireJedisInstance();
             Boolean exist = jedis.exists(keyPrefix + UUID);
             if (exist) {
-                String paymentJSON = jedis.get(keyPrefix + UUID);
-                Payment payment = gson.fromJson(paymentJSON, Payment.class);
-                throw PaymentAlreadyInProcessException.withTransactionId(payment.getUuid());
+                String transaction = jedis.get(keyPrefix + UUID);
+                throw PaymentAlreadyInProcessException.withTransactionId(UUID);
             }
         } catch (Exception e) {
             logger.info("Error occured while checking if data exist from the cache " + e.getMessage());

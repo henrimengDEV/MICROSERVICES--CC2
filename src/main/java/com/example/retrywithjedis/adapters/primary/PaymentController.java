@@ -75,7 +75,7 @@ public class PaymentController {
         return ResponseEntity.ok(payment);
     }
 
-    @GetMapping("{transactionUUID}")
+    @GetMapping("/status/{transactionUUID}")
     public ResponseEntity<?> getPaymentByTransactionUUID(@PathVariable String transactionUUID) {
 
         String transactionStatus = paymentCache.retrieveTransaction(UUID.fromString(transactionUUID));
