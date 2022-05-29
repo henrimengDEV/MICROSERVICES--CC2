@@ -23,7 +23,6 @@ public class JedisConfiguration {
     public JedisPool jedisPool() {
         JedisPoolConfig poolConfig = new JedisPoolConfig();
         poolConfig.setMaxTotal(redisMaximumActiveConnectionCount);
-
         return new JedisPool(poolConfig, redisHost, redisPort, redisTimeout);
     }
 }

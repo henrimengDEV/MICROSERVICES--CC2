@@ -1,4 +1,4 @@
-package com.example.retrywithjedis.adapters.secondary.persistence;
+package com.example.retrywithjedis.adapters.secondary.database;
 
 import com.example.retrywithjedis.domain.payment.Payment;
 import com.example.retrywithjedis.domain.payment.PaymentId;

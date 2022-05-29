@@ -28,7 +28,7 @@ public final class Payment implements Serializable {
     }
 
     public static Payment of(UUID uuid, BuyerInfo buyerInfo, String checkoutId, CreaditCardInfo creditCardInfo, List<Order> paymentOrders, PaymentStatus paymentStatus) {
-        return new Payment(uuid, new PaymentId(-1), buyerInfo, checkoutId, creditCardInfo, paymentOrders, paymentStatus);
+        return new Payment(uuid, PaymentId.of(-1), buyerInfo, checkoutId, creditCardInfo, paymentOrders, paymentStatus);
     }
 
     public UUID getUuid() {
@@ -56,11 +56,11 @@ public final class Payment implements Serializable {
     }
 
     public void setPaymentId(int id) {
-        this.paymentId = new PaymentId(id);
+        this.paymentId = PaymentId.of(id);
     }
 
-    public String getStatus() {
-        return this.status.getValue();
+    public PaymentStatus getStatus() {
+        return this.status;
     }
 
     public void setStatus(PaymentStatus status) {

@@ -1,14 +1,19 @@
 package com.example.retrywithjedis.kernel;
 
-import java.util.UUID;
-
 public class PaymentFailedException extends RuntimeException{
 
-    public PaymentFailedException(String message) {
+    private final int paymentId;
+
+    public PaymentFailedException(String message, int paymentId) {
         super(message);
+        this.paymentId = paymentId;
     }
 
-    public static PaymentFailedException withId(UUID transactionId) {
-        return new PaymentFailedException(String.format("Payment failed with transaction ID %s.", transactionId.toString()));
+    public static PaymentFailedException withId(int paymentId) {
+        return new PaymentFailedException(String.format("Payment failed with payment ID %s.", paymentId), paymentId);
+    }
+
+    public int getPaymentId() {
+        return paymentId;
     }
 }

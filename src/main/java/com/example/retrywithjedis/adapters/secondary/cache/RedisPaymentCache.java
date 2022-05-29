@@ -1,16 +1,18 @@
 package com.example.retrywithjedis.adapters.secondary.cache;
 
+import com.example.retrywithjedis.domain.payment.Payment;
 import com.example.retrywithjedis.domain.payment.PaymentCache;
-import com.example.retrywithjedis.domain.payment.PaymentStatus;
+import com.example.retrywithjedis.domain.payment.PaymentId;
+import com.example.retrywithjedis.kernel.PaymentAlreadyInProcessException;
 import com.google.gson.Gson;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.util.CollectionUtils;
 import org.springframework.util.StringUtils;
 import redis.clients.jedis.Jedis;
 import redis.clients.jedis.JedisPool;
-import redis.clients.jedis.exceptions.JedisDataException;
 
 import java.util.List;
+import java.util.NoSuchElementException;
 import java.util.UUID;
 import java.util.logging.Logger;
 
@@ -41,17 +43,19 @@ public class RedisPaymentCache implements PaymentCache {
     }
 
     @Override
-    public void verifyIdempotency(UUID UUID) {
+    public void verifyTransactionIdempotency(UUID UUID) throws PaymentAlreadyInProcessException{
         Jedis jedis = null;
 
         try {
             jedis = acquireJedisInstance();
-            String paymentJSON = jedis.get(keyPrefix + UUID);
-            if (StringUtils.hasText(paymentJSON)) {
-                throw new JedisDataException("Transaction already taken in count, status : " + paymentJSON);
+            Boolean exist = jedis.exists(keyPrefix + UUID);
+            if (exist) {
+                String paymentJSON = jedis.get(keyPrefix + UUID);
+                Payment payment = gson.fromJson(paymentJSON, Payment.class);
+                throw PaymentAlreadyInProcessException.withTransactionId(payment.getUuid());
             }
         } catch (Exception e) {
-            logger.info("Error occured while retrieving data from the cache " + e.getMessage());
+            logger.info("Error occured while checking if data exist from the cache " + e.getMessage());
             releaseJedisInstance(jedis);
             throw new RuntimeException(e);
         } finally {
@@ -60,13 +64,12 @@ public class RedisPaymentCache implements PaymentCache {
     }
 
     @Override
-    public void storePayment(UUID paymentUUID, String paymentStatus) {
+    public void storeTransaction(UUID paymentUUID, String transactionStatus) {
         Jedis jedis = null;
 
         try {
             jedis = acquireJedisInstance();
-            String json = gson.toJson(paymentStatus);
-            jedis.set(keyPrefix + paymentUUID, json);
+            jedis.set(keyPrefix + paymentUUID, transactionStatus);
             jedis.expire(keyPrefix + paymentUUID, sessiondataTTL);
         } catch (Exception e) {
             logger.info("Error occured while storing data to the cache " + e.getMessage());
@@ -78,14 +81,32 @@ public class RedisPaymentCache implements PaymentCache {
     }
 
     @Override
-    public PaymentStatus retrievePayment(UUID paymentUUID) {
+    public void storePayment(PaymentId paymentUUID, Payment payment) {
         Jedis jedis = null;
 
         try {
             jedis = acquireJedisInstance();
-            String paymentJSON = jedis.get(keyPrefix + paymentUUID);
-            if (StringUtils.hasText(paymentJSON)) {
-                return gson.fromJson(paymentJSON, PaymentStatus.class);
+            String paymentJSON = gson.toJson(payment);
+            jedis.set(keyPrefix + paymentUUID, paymentJSON);
+            jedis.expire(keyPrefix + paymentUUID, sessiondataTTL);
+        } catch (Exception e) {
+            logger.info("Error occured while storing data to the cache " + e.getMessage());
+            releaseJedisInstance(jedis);
+            throw new RuntimeException(e);
+        } finally {
+            releaseJedisInstance(jedis);
+        }
+    }
+
+    @Override
+    public String retrieveTransaction(UUID transactionId) {
+        Jedis jedis = null;
+
+        try {
+            jedis = acquireJedisInstance();
+            String transactionStatus = jedis.get(keyPrefix + transactionId);
+            if (StringUtils.hasText(transactionStatus)) {
+                return transactionStatus;
             }
         } catch (Exception e) {
             logger.info("Error occured while retrieving data from the cache " + e.getMessage());
@@ -95,6 +116,12 @@ public class RedisPaymentCache implements PaymentCache {
             releaseJedisInstance(jedis);
         }
 
+        throw new NoSuchElementException();
+    }
+
+    @Override
+    public Payment retrievePayment(PaymentId paymentId) {
+        //TODO
         return null;
     }
 
