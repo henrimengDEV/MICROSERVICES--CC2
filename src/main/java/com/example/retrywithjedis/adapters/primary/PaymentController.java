@@ -58,6 +58,7 @@ public class PaymentController {
 
         //Update cache
         paymentCache.storeTransaction(payment.getUuid(), payment.getStatus().getValue());
+    // TODO store payment in cache
 
         return ResponseEntity.created(linkTo(methodOn(PaymentController.class).getPaymentById(paymentId.getValue())).toUri()).build();
     }
@@ -72,6 +73,7 @@ public class PaymentController {
         if (Objects.isNull(payment))
             payment = paymentRepository.findById(paymentId);    //if not retrieve payment from database
 
+        // put it in the cache
         return ResponseEntity.ok(payment);
     }
 
@@ -79,7 +81,8 @@ public class PaymentController {
     public ResponseEntity<?> getPaymentByTransactionUUID(@PathVariable String transactionUUID) {
 
         String transactionStatus = paymentCache.retrieveTransaction(UUID.fromString(transactionUUID));
-
         return ResponseEntity.ok(transactionStatus);
     }
+
+    //todo delete and delete in cache
 }

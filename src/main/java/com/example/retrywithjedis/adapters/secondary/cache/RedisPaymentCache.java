@@ -43,7 +43,7 @@ public class RedisPaymentCache implements PaymentCache {
     }
 
     @Override
-    public void verifyTransactionIdempotency(UUID UUID) throws PaymentAlreadyInProcessException{
+    public void verifyTransactionIdempotency(UUID UUID) throws PaymentAlreadyInProcessException {
         Jedis jedis = null;
 
         try {
