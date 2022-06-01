@@ -1,0 +1,19 @@
+version: '3.1'
+
+services:
+  redis-server:
+    hostname: redis
+    image: 'redis'
+    ports:
+      - "6379:6379"
+  java-service:
+    image: maven:3.8.3-openjdk-17
+    command: mvn spring-boot:run
+    ports:
+        - 8090:8090
+        - 8080:8080
+    volumes:
+        - .:/usr/src/mymaven:rw
+    working_dir: /usr/src/mymaven
+    links:
+      - redis-server
