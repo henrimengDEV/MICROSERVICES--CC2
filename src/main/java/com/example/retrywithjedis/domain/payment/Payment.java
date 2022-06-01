@@ -1,7 +1,5 @@
 package com.example.retrywithjedis.domain.payment;
 
-import com.example.retrywithjedis.domain.order.Order;
-
 import java.io.Serializable;
 import java.util.List;
 import java.util.UUID;
@@ -14,10 +12,10 @@ public final class Payment implements Serializable {
     private final BuyerInfo buyerInfo;
     private final String checkoutId;
     private final CreaditCardInfo creditCardInfo;
-    private final List<Order> paymentOrders;
+    private final List<String> paymentOrders;
     private PaymentStatus status;
 
-    private Payment(UUID uuid, PaymentId id, BuyerInfo buyerInfo, String checkoutId, CreaditCardInfo creditCardInfo, List<Order> paymentOrders, PaymentStatus status) {
+    private Payment(UUID uuid, PaymentId id, BuyerInfo buyerInfo, String checkoutId, CreaditCardInfo creditCardInfo, List<String> paymentOrders, PaymentStatus status) {
         this.uuid = uuid;
         this.paymentId = id;
         this.buyerInfo = buyerInfo;
@@ -27,7 +25,7 @@ public final class Payment implements Serializable {
         this.status = status;
     }
 
-    public static Payment of(UUID uuid, BuyerInfo buyerInfo, String checkoutId, CreaditCardInfo creditCardInfo, List<Order> paymentOrders, PaymentStatus paymentStatus) {
+    public static Payment of(UUID uuid, BuyerInfo buyerInfo, String checkoutId, CreaditCardInfo creditCardInfo, List<String> paymentOrders, PaymentStatus paymentStatus) {
         return new Payment(uuid, PaymentId.of(-1), buyerInfo, checkoutId, creditCardInfo, paymentOrders, paymentStatus);
     }
 
@@ -51,7 +49,7 @@ public final class Payment implements Serializable {
         return creditCardInfo;
     }
 
-    public List<Order> getPaymentOrders() {
+    public List<String> getPaymentOrders() {
         return paymentOrders;
     }
 

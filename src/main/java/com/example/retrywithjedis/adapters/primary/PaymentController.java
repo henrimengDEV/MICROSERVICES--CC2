@@ -1,6 +1,5 @@
 package com.example.retrywithjedis.adapters.primary;
 
-import com.example.retrywithjedis.domain.order.Order;
 import com.example.retrywithjedis.domain.payment.*;
 import com.example.retrywithjedis.kernel.PaymentFailedException;
 import org.springframework.http.ResponseEntity;
@@ -40,7 +39,7 @@ public class PaymentController {
             throw PaymentFailedException.withId(existingPayment.get().getPaymentId().getValue());
 
         //fake paymentRequest data
-        Payment payment = Payment.of(UUID.fromString(transactionId), new BuyerInfo("Henri", "Meng", "0102030405", "62 rue de redis", "13375"), "checkoutId", new CreaditCardInfo("0102 0304 0506 0708", "05/23", "123"), new ArrayList<Order>(), PaymentStatus.IN_PROGRESS);
+        Payment payment = Payment.of(UUID.fromString(transactionId), new BuyerInfo("Henri", "Meng", "0102030405", "62 rue de redis", "13375"), "checkoutId", new CreaditCardInfo("0102 0304 0506 0708", "05/23", "123"), new ArrayList<String>(), PaymentStatus.IN_PROGRESS);
 
         paymentCache.storeTransaction(transactionUUID, payment.getStatus().getValue());
 
@@ -78,7 +77,7 @@ public class PaymentController {
     }
 
     @GetMapping("/status/{transactionUUID}")
-    public ResponseEntity<?> getPaymentByTransactionUUID(@PathVariable String transactionUUID) {
+    public ResponseEntity<?> getPaymentStatusByTransactionUUID(@PathVariable String transactionUUID) {
 
         String transactionStatus = paymentCache.retrieveTransaction(UUID.fromString(transactionUUID));
         return ResponseEntity.ok(transactionStatus);
