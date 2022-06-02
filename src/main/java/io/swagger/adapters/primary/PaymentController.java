@@ -76,7 +76,6 @@ public class PaymentController implements PaymentsApi{
         Payment payment = paymentService.retrievePayment(retrievePaymentRequest);
 
         PaymentResponse paymentResponse = paymentResponseAdapter.adapt(payment);
-
         return ResponseEntity.ok(paymentResponse);
     }
 
