@@ -3,6 +3,7 @@ package io.swagger.adapters.secondary.cache;
 import com.google.gson.Gson;
 import io.swagger.domain.payment.PaymentCache;
 import io.swagger.domain.payment.PaymentId;
+import io.swagger.kernel.NotYetImplementedException;
 import io.swagger.kernel.PaymentAlreadyInProcessException;
 import io.swagger.domain.payment.Payment;
 import org.springframework.beans.factory.annotation.Value;
@@ -120,8 +121,7 @@ public class RedisPaymentCache implements PaymentCache {
 
     @Override
     public Payment retrievePayment(PaymentId paymentId) {
-        //TODO
-        return null;
+        throw new NotYetImplementedException();
     }
 
     @Override

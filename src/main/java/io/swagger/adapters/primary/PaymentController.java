@@ -12,6 +12,7 @@ import io.swagger.application.dto.CreditCardInfoDTO;
 import io.swagger.domain.payment.Payment;
 import io.swagger.domain.payment.PaymentId;
 import io.swagger.domain.payment.PaymentService;
+import io.swagger.kernel.NotYetImplementedException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.http.MediaType;
@@ -66,7 +67,7 @@ public class PaymentController implements PaymentsApi{
 
     @Override
     public ResponseEntity<Void> deletePaymentById(int paymentId) {
-        return null;
+        throw new NotYetImplementedException();
     }
 
     @GetMapping(value = "{Id}", produces = MediaType.APPLICATION_JSON_VALUE)
@@ -87,6 +88,4 @@ public class PaymentController implements PaymentsApi{
 
         return ResponseEntity.ok(transactionStatus);
     }
-
-    //todo delete and delete in cache
 }

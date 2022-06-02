@@ -30,7 +30,7 @@ public interface PaymentsApi {
     @RequestMapping(value = "/payments/{paymentId}",
             produces = {"application/json"},
             method = RequestMethod.DELETE)
-    ResponseEntity<Void> deletePaymentById(@ApiParam(value = "ID of an existing payment", required = true) @PathVariable("paymentId") int paymentId);
+    ResponseEntity<Void> deletePaymentById(@ApiParam(value = "ID of an existing payment", required = true, example = "1337") @PathVariable("paymentId") int paymentId);
 
 
     @ApiOperation(value = "Find payment by ID", nickname = "getPaymentById", notes = "Returns a single payment", response = PaymentResponse.class, tags = {"payments",})
@@ -41,7 +41,7 @@ public interface PaymentsApi {
     @RequestMapping(value = "/payments/{paymentId}",
             produces = {"application/json"},
             method = RequestMethod.GET)
-    ResponseEntity<PaymentResponse> getPaymentById(@ApiParam(value = "ID of payment to return", required = true) @PathVariable("paymentId") int paymentId);
+    ResponseEntity<PaymentResponse> getPaymentById(@ApiParam(value = "ID of payment to return", required = true, example = "1337") @PathVariable("paymentId") int paymentId);
 
 
     @ApiOperation(value = "Find payment status by transaction UUID", nickname = "getPaymentStatusByTransactionUUID", notes = "Returns a single payment status", response = String.class, tags = {"payments",})
