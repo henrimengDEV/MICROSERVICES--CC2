@@ -2,7 +2,10 @@
 
 Spring Boot Server
 
-Documentation -> [Diagrams](https://ibb.co/6YKNL1c)
+Documentation:
+
+- [Diagrams](https://ibb.co/6YKNL1c)
+
 
 ## Overview
 
